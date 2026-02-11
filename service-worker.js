@@ -1,19 +1,21 @@
-const cacheName = "missions-v1";
-const files = [
+const cacheName="missions-v1";
+
+const files=[
  "index.html",
  "styles.css",
  "data.js"
 ];
 
-self.addEventListener("install", e => {
+self.addEventListener("install",e=>{
  e.waitUntil(
- caches.open(cacheName).then(c => c.addAll(files))
+  caches.open(cacheName)
+  .then(c=>c.addAll(files))
  );
 });
 
-self.addEventListener("fetch", e => {
+self.addEventListener("fetch",e=>{
  e.respondWith(
- caches.match(e.request).then(r => r || fetch(e.request))
+  caches.match(e.request)
+  .then(r=>r||fetch(e.request))
  );
 });
-
