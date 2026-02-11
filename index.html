@@ -3,20 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <title>Guatemala Missions GPS</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="styles.css">
 <link rel="manifest" href="manifest.json">
 </head>
 
 <body>
+<h1>🇬🇹 Guatemala Missions Trip</h1>
+<button onclick="startGPS()">Find Nearby Stops</button>
+<div id="results"></div>
 
-<h2>🇬🇹 Guatemala Missions Trip Guide</h2>
-<button onclick="startGPS()">Find Nearby Mission Stops</button>
+<script src="data.js"></script>
+<script>
 
-<div id="output"></div>
+if ("serviceWorker" in navigator) {
+ navigator.serviceWorker.register("service-worker.js");
+}
 
-<script src="locations.js"></script>
-<script src="app.js"></script>
+function startGPS() {
+ navigator.geolocation.getCurrentPosition(showStops);
+}
+
+function showStops(pos) {
+ let lat = pos.coords.latitude;
+ let lng = pos.coords.longitude;
+ let html = "";
+
+stops.forEach(s => {
+ let d = distance(lat,lng,s.lat,s.lng);
+ if(d < 25){
+ html += `
+ <div class="card">
+ <h3>${s.name}</h3>
+ <p><b>Important:</b> ${s.important}</p>
+ <p><b>Interesting:</b> ${s.interesting}</p>
+ <p><b>Distance:</b> ${d.toFixed(1)} km</p>
+ </div>`;
+ }
+});
+
+ document.getElementById("results").innerHTML =
+ html || "No nearby stops yet.";
+}
+
+function distance(a,b,c,d){
+ let R=6371;
+ let x=(c-a)*Math.PI/180;
+ let y=(d-b)*Math.PI/180;
+ let z=
+ Math.sin(x/2)**2+
+ Math.cos(a*Math.PI/180)*
+ Math.cos(c*Math.PI/180)*
+ Math.sin(y/2)**2;
+ return R*(2*Math.atan2(Math.sqrt(z),Math.sqrt(1-z)));
+}
+</script>
 
 </body>
 </html>
-
