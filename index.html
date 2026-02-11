@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Guatemala Missions GPS</title>
+</head>
+<body>
+
+<h2>Guatemala Missions Trip Guide</h2>
+<button onclick="startGPS()">Find Locations</button>
+
+<div id="output"></div>
+
+<script>
+
+const locations = [
+{
+ name: "Guatemala City",
+ lat: 14.6349,
+ lng: -90.5069,
+ info: "Trip starting point."
+},
+{
+ name: "Zacapa",
+ lat: 14.9722,
+ lng: -89.5333,
+ info: "Mission destination."
+}
+];
+
+function startGPS(){
+ navigator.geolocation.getCurrentPosition(showLocations);
+}
+
+function showLocations(position){
+ let userLat = position.coords.latitude;
+ let userLng = position.coords.longitude;
+ document.getElementById("output").innerHTML =
+ "Your location detected.";
+}
+
+</script>
+
+</body>
+</html>
